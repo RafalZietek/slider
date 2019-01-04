@@ -1,0 +1,39 @@
+@media(max-width: 1024px) and (orientation: portrait) {
+		#gallery {
+			padding: 10px;
+		}
+		.images, .images p{		
+			height: 15vh;
+		}
+		.images p i {
+			line-height: 15vh;
+		}
+	}
+	@media(max-width: 640px) {
+		.images, .images p{		
+			width: 40%;
+			height: 40vh;
+			margin: 5px;
+		}
+		.images p i {
+			line-height: 40vh;
+		}
+		.imageTitle {
+			font-size: 2em;
+		}
+		.description {
+			font-size: 1.1em;
+		}
+		.next img, .prev img, .hidden img {
+			width: 75%;
+		}
+	}
+	@media(max-width: 460px) {
+		.images, .images p {
+			width: 90%;
+			height: 30vh;		
+		}
+		.next {
+			right: 2%;
+		}
+	}
