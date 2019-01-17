@@ -153,31 +153,38 @@ div.images p:hover {
 	color: #fff;
 }
 
-.image {
+.image, .imageNext {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);	
 }
-
+.imageNext {
+	display: none;
+	/* opacity: 0.1; */
+}
+/* .image { */
+	/* z-index: 10; */
+/* } */
 .nextComing{
-	animation: nextComing 0.3s linear;
+	animation: nextComing 0.3s linear;	
 }
 .nextOut{
 	animation: nextOut 0.3s linear;
+	
 }
 .prevComing{
 	animation: prevComing 0.3s linear;
 }
 .prevOut{
 	animation: prevOut 0.3s linear;
+	
 }
 
 
-.image img {
+.image img, .imageNext img {
 	width: 100%;
 	box-shadow: 20px 0px 7px #fff, -20px 0px 7px #fff, 0 40px 7px #fff, 0 -20px 7px #fff, 20px 40px 7px #fff, -20px 40px 7px #fff, -20px -20px 7px #fff, 20px -20px 7px #fff;
-	/* animation: nextComing 0.5s linear; */
 }
 
 .imageTitle {
@@ -190,21 +197,28 @@ div.images p:hover {
 }
 @keyframes nextComing {
 	0% {
-		transform: translateX(-150%);
+		transform: translate(-150%, 0);
 		opacity: 0;
 	}
+	10%{
+		opacity: 1;
+	}
 	100% {
-		transform: translateX(0);
+		transform: translate(0,0);
 		opacity: 1;
 	}	
 }
 @keyframes nextOut {
 	0% {
-		transform: translateX(0);
+		transform: translate(0,0);
+		opacity: 1;
+		display: block;
+	}
+	10%{
 		opacity: 1;
 	}
 	100% {
-		transform: translateX(150%);
+		transform: translate(150%,0);
 		opacity: 1;
 	}	
 }
@@ -212,6 +226,9 @@ div.images p:hover {
 	0% {
 		transform: translateX(150%);
 		opacity: 0;
+	}
+	10%{
+		opacity: 1;
 	}
 	100% {
 		transform: translateX(0);
@@ -221,6 +238,10 @@ div.images p:hover {
 @keyframes prevOut {
 	0% {
 		transform: translateX(0);
+		opacity: 1;
+		display: block;
+	}
+	10%{
 		opacity: 1;
 	}
 	100% {

@@ -1,117 +1,162 @@
-// slider v 1.0
+// slider v 2.0
 // author panjanek
 
 const showSlider = document.querySelector('section.modal-wrap');
 const activeImage = document.querySelector('section.modal-wrap .image');
-const nextImage = document.querySelector('.next');
-const prevImage = document.querySelector('.prev');
-const description = document.querySelector('.description');
+const imageNext = document.querySelector('section.modal-wrap .imageNext');
+const imageDescription = document.querySelector('.description');
 const imageTitle = document.querySelector('.imageTitle');
+const nextArrow = document.querySelector('.next');
+const prevArrow = document.querySelector('.prev');
 
-const images = [...document.querySelectorAll('.images')];
-// wypełnienie galerii
-for(let i = 0; i<images.length; i++) {
-    images[i].style.backgroundImage = 'url("img/gallery-image-'+(i+1)+'.jpg")';
+const currentPicture = document.querySelector('.currentPicture');
+const nextPicture = document.querySelector('.nextPicture');
+
+//pobranie wszystkich div'ów o klasie images
+const imagesDiv = [...document.querySelectorAll('.images')];
+//stworzenie tablicy z obrazami
+const images = [];
+// wypełnienie galerii obrazami i stworzenie tablicy z obrazkami
+for(let i = 0; i < imagesDiv.length; i++) {
+    imagesDiv[i].style.backgroundImage = 'url("img/gallery-image-'+(i+1)+'.jpg")';
+	images[i] = `img/gallery-image-${i + 1}.jpg`; ;
 };
 
-let imageDescription = '';
 let pictureIndex = 0;
-let nextActiveImage = ''
-
 
 function showGallery() {	
 
+// const activeImage = document.querySelector('section.modal-wrap .image');
+// console.log(activeImage);
     //pokazanie slidera
     showSlider.classList.add('showSlider');
     //nadanie klikniętemu obrazkowi klasę active
-    this.classList.add('active');
-    
+    this.classList.add('active'); 
     //pobranie indeksu klikniętego obrazka  	
-    pictureIndex = images.findIndex(image => image.classList.contains('active'));
-    imageDescription = images[pictureIndex].getAttribute('title');
-	imageTitle.innerHTML = imageDescription;
-
-    activeImage.innerHTML = `<image src = 'img/gallery-image-${pictureIndex + 1}.jpg'>`;
-	
-	nextActiveImage = activeImage.firstChild;
-	nextActiveImage.classList.add('nextComing');	
+    pictureIndex = imagesDiv.findIndex(image => image.classList.contains('active'));
+	 
+    
+	showPicture();		
 
     //pokazanie strzałek	    	
     if (pictureIndex == images.length - 1) {
-        nextImage.style.display = 'none';
+        nextArrow.style.display = 'none';
     } else {
-        nextImage.style.display = 'block';
+        nextArrow.style.display = 'block';
     }
     if (pictureIndex == 0) {
-        prevImage.style.display = 'none';
+        prevArrow.style.display = 'none';
     } else {
-        prevImage.style.display = 'block';
-    }
-    description.innerHTML = `Zdjęcie ${pictureIndex + 1} z ${images.length}`
+        prevArrow.style.display = 'block';
+    }	    
 	
+	currentPicture.classList.add('nextComing');	
+}
+function change (param) {
 	
-	// console.log(activeImage.firstChild);
-	// return nextActiveImage;
-	
+	if(param.classList.contains('next')) {
+		nextPicture.src =  images[pictureIndex-1];
+	} else if(param.classList.contains('prev')) {
+		nextPicture.src = images[pictureIndex+1];		
+	}		
 }
 
-function next() {
+ function next() {
+	pictureIndex++;	
+	imageNext.style.display = 'block';
+	setTimeout(() => {
+		imageNext.style.display = 'none';
+	}, 300);
 	
-	// nextActiveImage.classList.remove('nextComing');
-	// nextActiveImage.classList.add('nextOut');
-	// console.log(nextActiveImage);
-	
-	pictureIndex++;
 	
     if (pictureIndex >= images.length - 1) {
-        nextImage.style.display = 'none';
+        nextArrow.style.display = 'none';
     }
-    activeImage.innerHTML = `<image src = 'img/gallery-image-${pictureIndex + 1}.jpg'>`;	
-    prevImage.style.display = 'block';	
-    description.innerHTML = `Zdjęcie ${pictureIndex + 1} z ${images.length}`
-    imageDescription = images[pictureIndex].getAttribute('title');
-    imageTitle.innerHTML = imageDescription;
 	
-	nextActiveImage = activeImage.firstChild;
-	nextActiveImage.classList.remove('prevComing');
-	nextActiveImage.classList.add('nextComing');
-	// console.log(nextActiveImage);
+	prevArrow.style.display = 'block';	
+	change (this);
+	addClassNext();
 	
-	// return nextActiveImage;
-}
+	showPicture();	
+	
+ }
 
 function prev() {
-		
-    pictureIndex--;
+	pictureIndex--;
 	
-    if (pictureIndex == 0) {
-        prevImage.style.display = 'none';
-    }
-    activeImage.innerHTML = `<image src = 'img/gallery-image-${pictureIndex + 1}.jpg'>`;
-    nextImage.style.display = 'block';
-    description.innerHTML = `Zdjęcie ${pictureIndex + 1} z ${images.length}`
-    imageDescription = images[pictureIndex].getAttribute('title');
-    imageTitle.innerHTML = imageDescription;
+	imageNext.style.display = 'block';
+	setTimeout(() => {
+		imageNext.style.display = 'none';
+	}, 300);
 	
-	nextActiveImage = activeImage.firstChild;
-	nextActiveImage.classList.remove('nextComing');
-	nextActiveImage.classList.add('prevComing');
-	// console.log(nextActiveImage);
+	if (pictureIndex == 0) {
+        prevArrow.style.display = 'none';
+    }	
+	nextArrow.style.display = 'block';	
+	change (this);
+	addClassPrev();	
 	
+	showPicture();	
 }
+function addClassNext() {
+	currentPicture.classList.remove('nextComing', 'nextOut', 'prevComing', 'prevOut');
+	nextPicture.classList.remove('nextComing','nextOut', 'prevComing', 'prevOut');
+	//animacja nie uruchomi się jeszcze raz gdy usuniemy clasę i dodamy następną
+	// na tym samym elemencie. Trzeba zastosować triki
+	void currentPicture.offsetWidth;
+	void nextPicture.offsetWidth;
+	
+	currentPicture.classList.add('nextComing');	
+	nextPicture.classList.add('nextOut');
+}
+function addClassPrev() {
+	nextPicture.classList.remove('nextComing','nextOut', 'prevComing', 'prevOut');
+	currentPicture.classList.remove('nextComing', 'nextOut', 'prevComing', 'prevOut');
+	void currentPicture.offsetWidth;
+	void nextPicture.offsetWidth;
+	currentPicture.classList.add('prevComing');	
+	nextPicture.classList.add('prevOut');
+}
+
+function showPicture() {
+	if(pictureIndex == 0) {
+		nextPicture.src =  images[pictureIndex+1];  	 
+		currentPicture.src =  images[pictureIndex];  	 
+		imageDescription.innerHTML = `Zdjęcie ${pictureIndex + 1} z ${images.length}`
+		imageTitle.innerHTML = imagesDiv[pictureIndex].getAttribute('title');	
+	} else if(pictureIndex == images.length-1){
+		nextPicture.src = images[pictureIndex - 1]; 
+		currentPicture.src =  images[pictureIndex];  	 
+		imageDescription.innerHTML = `Zdjęcie ${pictureIndex + 1} z ${images.length}`
+		imageTitle.innerHTML = imagesDiv[pictureIndex].getAttribute('title');
+	}
+	else {		
+		currentPicture.src =  images[pictureIndex];  	 
+		imageDescription.innerHTML = `Zdjęcie ${pictureIndex + 1} z ${images.length}`
+		imageTitle.innerHTML = imagesDiv[pictureIndex].getAttribute('title');
+		// imageNext.style.display = 'none';
+	}	
+}
+
 
 // zamkniecie slider'a
 document.querySelector('.hidden').addEventListener('click', function () {
     showSlider.classList.remove('showSlider');
-    images.forEach(image => {
-        image.classList.remove('active');
+	currentPicture.src =  '';
+	currentPicture.classList.remove('nextComing','nextOut', 'prevComing', 'prevOut');
+	
+	nextPicture.src =  '';
+	nextPicture.classList.remove('nextComing','nextOut', 'prevComing', 'prevOut');
+	
+    imagesDiv.forEach(imageDiv => {
+        imageDiv.classList.remove('active');
     });
     pictureIndex = 0;
 });
 
 // nasłuchiwanie na klik
-images.forEach(image => {
+imagesDiv.forEach(image => {
     image.addEventListener('click', showGallery);
 });
-nextImage.addEventListener('click', next);
-prevImage.addEventListener('click', prev);
+nextArrow.addEventListener('click', next);
+prevArrow.addEventListener('click', prev);
